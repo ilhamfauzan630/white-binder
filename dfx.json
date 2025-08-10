@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "white-binder-backend": {
+      "main": "src/white-binder-backend/main.mo",
+      "type": "motoko"
+    },
+    "white-binder-frontend": {
+      "dependencies": [
+        "white-binder-backend"
+      ],
+      "source": [
+        "src/white-binder-frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "white-binder-frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
