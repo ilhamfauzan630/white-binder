@@ -1,23 +1,30 @@
 import AuthService "./services/auth/AuthService";
 
-persistent actor {
-  // simpan state di stable var (kosong saat install), lalu inisialisasi pada init()
+actor {
+  // Simpan data user di stable var agar tidak hilang saat upgrade canister
   stable var users : [AuthService.User] = [];
 
+  // Inisialisasi user default saat pertama kali canister di-deploy
   public func init() {
-    users := AuthService.initUsers();
+    if (users.size() == 0) {
+      users := AuthService.initUsers();
+    };
   };
 
+  // Registrasi user baru
   public func register(username : Text, password : Text) : async Text {
     let (updated, msg) = AuthService.register(users, username, password);
     users := updated;
     return msg;
   };
 
+  // Login user
   public func login(username : Text, password : Text) : async Text {
-    return AuthService.login(users, username, password);
+    let msg = AuthService.login(users, username, password);
+    return msg;
   };
 
+  // Melihat semua user (untuk debug/admin)
   public query func listUsers() : async [AuthService.User] {
     return users;
   };

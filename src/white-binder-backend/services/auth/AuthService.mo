@@ -1,6 +1,7 @@
 import Array "mo:base/Array";
 import Nat "mo:base/Nat";
 import Text "mo:base/Text";
+import Time "mo:base/Time";
 
 import Utils "./Utils";
 import DummyData "./DummyData";
@@ -10,7 +11,7 @@ module {
 
   // return initial users (pure)
   public func initUsers() : [User] {
-    DummyData.getInitialUsers();
+    DummyData.getDummyUsers(Time.now());
   };
 
   // register: menerima array users, mengembalikan (updatedUsers, message)
@@ -25,7 +26,7 @@ module {
           id = newId;
           username = username;
           passwordHash = Utils.hashPassword(password);
-          createdAt = 0;
+          createdAt = Time.now();
         };
         let updated = Array.append<User>(users, [newUser]);
         return (updated, "User registered successfully");

@@ -1,28 +1,24 @@
-import Nat "mo:base/Nat";
-import Text "mo:base/Text";
-
 module {
   public type User = {
     id : Nat;
     username : Text;
     passwordHash : Text;
-    createdAt : Nat;
+    createdAt : Int;
   };
 
-  // Data dummy awal (password sudah \"hashed_\" prefix untuk demo)
-  public func getInitialUsers() : [User] {
+  public func getDummyUsers(createdAt : Int) : [User] {
     return [
       {
         id = 1;
-        username = "alice";
-        passwordHash = "hashed_password123";
-        createdAt = 0;
+        username = "Alice";
+        passwordHash = "tbdash11";
+        createdAt = createdAt;
       },
       {
         id = 2;
-        username = "bob";
-        passwordHash = "hashed_qwerty";
-        createdAt = 0;
+        username = "SuperKita";
+        passwordHash = "kitakita";
+        createdAt = createdAt;
       },
     ];
   };
