@@ -1,13 +1,14 @@
 import AuthService "./services/auth/AuthService";
+import WalletScanService "./services/scanWallet/WalletScanService";
 
 actor {
-  // Simpan data user di stable var agar tidak hilang saat upgrade canister
+  // Menyimpan data user secara permanen
   stable var users : [AuthService.User] = [];
 
-  // Inisialisasi user default saat pertama kali canister di-deploy
-  public func init() {
+  // Inisialisasi default user saat pertama kali canister dibuat
+  public func init() : async () {
     if (users.size() == 0) {
-      users := AuthService.initUsers();
+      users := AuthService.initUsers(); // Tidak pakai await
     };
   };
 
@@ -24,8 +25,13 @@ actor {
     return msg;
   };
 
-  // Melihat semua user (untuk debug/admin)
+  // Melihat semua user yang terdaftar
   public query func listUsers() : async [AuthService.User] {
     return users;
+  };
+
+  // Scan wallet address → ini harus `func` biasa (bukan query) supaya bisa `await`
+  public func scanWallet(address : Text) : async WalletScanService.ScanResult {
+    return await WalletScanService.scanWallet(address);
   };
 };
