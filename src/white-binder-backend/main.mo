@@ -1,37 +1,43 @@
 import AuthService "./services/auth/AuthService";
 import WalletScanService "./services/scanWallet/WalletScanService";
+import AnalyticsService "./services/analytics/AnalyticsService";
 
 actor {
   // Menyimpan data user secara permanen
   stable var users : [AuthService.User] = [];
 
-  // Inisialisasi default user saat pertama kali canister dibuat
+  // Inisialisasi user default
   public func init() : async () {
     if (users.size() == 0) {
-      users := AuthService.initUsers(); // Tidak pakai await
+      users := AuthService.initUsers();
     };
+    return (); // wajib return () karena async ()
   };
 
   // Registrasi user baru
-  public func register(username : Text, password : Text) : async Text {
-    let (updated, msg) = AuthService.register(users, username, password);
-    users := updated;
-    return msg;
+  public shared func register(username : Text, password : Text) : async Text {
+    let result = AuthService.register(users, username, password);
+    users := result.0;
+    return result.1;
   };
 
   // Login user
-  public func login(username : Text, password : Text) : async Text {
-    let msg = AuthService.login(users, username, password);
-    return msg;
+  public shared func login(username : Text, password : Text) : async Text {
+    return AuthService.login(users, username, password);
   };
 
   // Melihat semua user yang terdaftar
-  public query func listUsers() : async [AuthService.User] {
+  public shared query func listUsers() : async [AuthService.User] {
     return users;
   };
 
-  // Scan wallet address → ini harus `func` biasa (bukan query) supaya bisa `await`
+  // Scan wallet address (synchronous)
   public func scanWallet(address : Text) : async WalletScanService.ScanResult {
-    return await WalletScanService.scanWallet(address);
+    return WalletScanService.scanWallet(address); // wajib pakai 'return'
+  };
+
+  // Ambil semua analitik wallet
+  public shared query func getAnalytics(address : Text) : async AnalyticsService.AnalyticsResult {
+    return AnalyticsService.getAnalytics(address);
   };
 };
