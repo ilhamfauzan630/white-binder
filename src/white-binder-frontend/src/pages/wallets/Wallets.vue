@@ -1,95 +1,150 @@
 <template>
   <section class="text-white p-6">
-    <h2 class="text-xl font-bold mb-6">Riwayat Transaksi Wallet</h2>
+    <h2 class="text-xl font-bold mb-6">Riwayat Analisis Wallet</h2>
 
     <div class="mb-6">
       <label class="block text-lg mb-2">Pilih Wallet:</label>
-      <select v-model="selectedWallet" class="w-full px-4 py-2 rounded text-base bg-white text-black">
-        <option disabled value="" class="text-base">-- Pilih Wallet --</option>
-        <option v-for="wallet in wallets" :key="wallet.address" :value="wallet.address" class="text-base">
+      <select v-model="selectedWallet" class="w-full px-4 py-2 rounded text-sm bg-white text-black">
+        <option disabled value="">-- Pilih Wallet --</option>
+        <option v-for="wallet in wallets" :key="wallet.address" :value="wallet.address">
           {{ wallet.address }}
         </option>
       </select>
     </div>
 
-    <transition name="fade-slide" mode="out-in">
-      <div :key="transactionHistory.length">
-        <div v-if="transactionHistory.length" class="overflow-x-auto">
-          <h3 class="text-lg font-semibold mb-4">Riwayat untuk: {{ selectedWallet }}</h3>
-          <table class="min-w-full table-auto bg-gray-800 rounded-md">
-            <thead class="title text-left">
-              <tr>
-                <th class="px-6 py-3 text-lg">Tanggal</th>
-                <th class="px-6 py-3 text-lg">Tipe</th>
-                <th class="px-6 py-3 text-lg">Jumlah</th>
-                <th class="px-6 py-3 text-lg">Tujuan/Asal</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(tx, index) in transactionHistory"
-                :key="index"
-                class="border-t border-gray-700 bg-gray-900 hover:bg-gray-700"
-              >
-                <td class="px-6 py-3 text-base">{{ tx.date }}</td>
-                <td class="px-6 py-3 text-base">{{ tx.type }}</td>
-                <td class="px-6 py-3 text-base">{{ tx.amount }}</td>
-                <td class="px-6 py-3 text-base">{{ tx.counterparty }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+    <!-- Tambahkan transition -->
+<transition name="fade-slide" mode="out-in">
+  <div v-if="transactionHistory.length" :key="selectedWallet" class="overflow-x-auto">
+    <table class="min-w-full table-auto bg-gray-800 rounded-md text-sm">
+      <thead class="title">
+        <tr>
+          <th class="px-4 py-2 text-left">Wallet</th>
+          <th class="px-4 py-2 text-center">Total Volume</th>
+          <th class="px-4 py-2 text-center">Transactions</th>
+          <th class="px-4 py-2 text-center">Low Risk</th>
+          <!-- <th class="px-4 py-2 text-center">Medium Risk</th> -->
+          <th class="px-4 py-2 text-center">High Risk</th>
+          <th class="px-4 py-2 text-center">Detail</th>
+          <th class="px-4 py-2 text-center">Hapus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="(tx, i) in transactionHistory"
+          :key="i"
+          class="border-t border-gray-700 bg-gray-900 hover:bg-gray-700"
+        >
+          <td class="px-4 py-2 text-left">{{ tx.wallet }}</td>
+          <td class="px-4 py-2 text-center">{{ tx.totalVolume }}</td>
+          <td class="px-4 py-2 text-center">{{ tx.totalTransactions }}</td>
+          <td class="px-4 py-2 text-center">{{ tx.lowRisk }}</td>
+          <!-- <td class="px-4 py-2 text-center">{{ tx.mediumRisk }}</td> -->
+          <td class="px-4 py-2 text-center">{{ tx.highRisk }}</td>
 
-        <p v-else class="text-gray-400 text-lg">
-          Silakan pilih wallet untuk melihat riwayat transaksi.
-        </p>
-      </div>
-    </transition>
+          <!-- Tombol Detail -->
+          <td class="px-4 py-2 text-center">
+            <button
+              @click="showDetail(tx.wallet)"
+              class="px-3 py-1 bg-blue-600 rounded hover:bg-blue-700"
+            >
+              <i class="fa-solid fa-info" style="color: #ffffff;"></i>
+            </button>
+          </td>
+
+          <!-- Tombol Hapus -->
+          <td class="px-4 py-2 text-center">
+            <button
+              @click="deleteWallet(tx.wallet)"
+              class="text-red-500 hover:text-red-700"
+            >
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- beri key berbeda untuk smooth switch -->
+  <p v-else key="empty" class="text-gray-400 text-sm">
+    History wallet tidak tersedia.
+  </p>
+</transition>
+
+  
   </section>
+
 </template>
 
 <script>
 export default {
-  name: 'Wallets',
+  name: "Wallets",
   data() {
     return {
-      selectedWallet: '',
-      wallets: [
-        { address: '0xabc123...' },
-        { address: '0xdef456...' },
-        { address: '0x789ghi...' }
-      ],
-      history: {
-        '0xabc123...': [
-          { date: '2025-07-18', type: 'Deposit', amount: '100 ICP', counterparty: '0xother1...' },
-          { date: '2025-07-19', type: 'Withdraw', amount: '20 ICP', counterparty: '0xother2...' },
-        ],
-        '0xdef456...': [
-          { date: '2025-07-17', type: 'Deposit', amount: '500 ICP', counterparty: '0xbank1...' },
-        ],
-        '0x789ghi...': [
-          { date: '2025-07-21', type: 'Withdraw', amount: '200 ICP', counterparty: '0xcasino1...' },
-        ]
-      }
+      selectedWallet: "",
+      wallets: [], // dari LocalStorage
+      analysisData: {}, // mapping wallet → data analisis
     };
   },
   computed: {
     transactionHistory() {
-      return this.history[this.selectedWallet] || [];
-    }
-  }
+      if (!this.selectedWallet || !this.analysisData[this.selectedWallet]) {
+        return [];
+      }
+      const d = this.analysisData[this.selectedWallet];
+      return [
+        {
+          wallet: d.wallet,
+          totalVolume: d.totalVolume,
+          totalTransactions: d.totalTransactions,
+          lowRisk: d.lowRiskCount,
+          // mediumRisk: d.mediumRiskCount,
+          highRisk: d.highRiskCount,
+        },
+      ];
+    },
+  },
+  mounted() {
+    const saved = JSON.parse(localStorage.getItem("walletAnalysis") || "{}");
+    this.analysisData = saved;
+    this.wallets = Object.keys(saved).map((w) => ({ address: w }));
+  },
+  methods: {
+    showDetail(wallet) {
+      alert(`Detail wallet: ${wallet}`);
+    },
+    deleteWallet(wallet) {
+      if (!confirm(`Hapus data wallet ${wallet}?`)) return;
+      const saved = JSON.parse(localStorage.getItem("walletAnalysis") || "{}");
+      delete saved[wallet];
+      localStorage.setItem("walletAnalysis", JSON.stringify(saved));
+      this.analysisData = saved;
+      this.wallets = Object.keys(saved).map((w) => ({ address: w }));
+      if (this.selectedWallet === wallet) {
+        this.selectedWallet = "";
+      }
+    },
+  },
 };
 </script>
 
 <style scoped>
 .title {
   background-color: #172433;
+  font-size: 0.875rem;
 }
 
-/* Transisi fade + slide */
-.fade-slide-enter-active,
+button i {
+  font-size: 1rem;
+}
+
+/* Animasi tabel muncul */
+.fade-slide-enter-active {
+  transition: all 0.5s ease;
+}
 .fade-slide-leave-active {
-  transition: all 0.4s ease;
+  transition: all 0.3s ease;
+  opacity: 0;
 }
 .fade-slide-enter-from {
   opacity: 0;
@@ -98,13 +153,5 @@ export default {
 .fade-slide-enter-to {
   opacity: 1;
   transform: translateY(0);
-}
-.fade-slide-leave-from {
-  opacity: 1;
-  transform: translateY(0);
-}
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(10px);
 }
 </style>
