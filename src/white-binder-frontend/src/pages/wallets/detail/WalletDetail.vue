@@ -135,7 +135,6 @@ import {
   PointElement,
   CategoryScale,
   LinearScale,
-  filter
 } from 'chart.js'
 import { watch } from "vue"
 import whitebinder from '../../../dfinity/whitebinder.js'
