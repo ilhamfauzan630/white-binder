@@ -13,47 +13,59 @@
     </div>
 
     <!-- Hero Section -->
-<section class="h-screen flex items-center justify-center text-center px-6 snap-start snap-always">
-  <div :ref="setAnimRefs" class="opacity-0 translate-y-10 transition-all duration-700">
-    
-    <!-- Title + Icon -->
-    <h1 class="text-5xl font-bold mb-4 flex items-center justify-center gap-3">
-      <i class="fas fa-link text-blue-500"></i>
-      White Binder
-      <i class="fas fa-shield-alt text-green-500"></i>
-    </h1>
+    <section class="h-screen relative flex items-center justify-center text-center px-6 snap-start snap-always">
+      <!-- Video Background -->
+      <video
+        src="/videos/node_background.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+        class="absolute inset-0 w-full h-full object-cover z-0"
+      ></video>
 
-    <!-- Decorative Divider -->
-      <div class="flex items-center justify-center gap-3 text-gray-500 mb-6">
-        <span class="h-[1px] w-16 bg-gray-600"></span>
-        <i class="fas fa-circle text-[6px]"></i>
-        <i class="fas fa-circle text-[6px]"></i>
-        <i class="fas fa-circle text-[6px]"></i>
-        <span class="h-[1px] w-16 bg-gray-600"></span>
+      <!-- Konten -->
+      <div
+        :ref="setAnimRefs"
+        class="relative z-10 opacity-0 translate-y-10 transition-all duration-700"
+      >
+        <!-- Title + Icon -->
+        <h1 class="text-5xl font-bold mb-4 flex items-center justify-center gap-3">
+          <i class="fas fa-link text-blue-500"></i>
+          White Binder
+          <i class="fas fa-shield-alt text-green-500"></i>
+        </h1>
+
+        <!-- Decorative Divider -->
+        <div class="flex items-center justify-center gap-3 text-gray-500 mb-6">
+          <span class="h-[1px] w-16 bg-gray-600"></span>
+          <i class="fas fa-circle text-[6px]"></i>
+          <i class="fas fa-circle text-[6px]"></i>
+          <i class="fas fa-circle text-[6px]"></i>
+          <span class="h-[1px] w-16 bg-gray-600"></span>
+        </div>
+
+        <!-- Description -->
+        <p class="text-lg text-gray-300 max-w-2xl mb-8 leading-relaxed">
+          <i class="fas fa-search text-blue-400 mr-2"></i>
+          <span class="font-semibold">Analyze Wallets:</span>  
+          Enter any crypto wallet address and let <span class="text-blue-400 font-medium">White Binder</span>  
+          reveal transaction histories, suspicious activities, and potential risks in just seconds.
+        </p>
+
+        <!-- CTA Button -->
+        <router-link
+          to="/home"
+          class="px-8 py-3 bg-gradient-to-r from-blue-600 to-green-600 rounded-xl 
+                text-lg font-semibold transition flex items-center justify-center gap-2 
+                mx-auto w-fit shadow-lg group hover:shadow-blue-600/40 hover:shadow-green-600/40 duration-300"
+        >
+          <i class="fas fa-rocket group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300"></i>
+          Get Started
+        </router-link>
       </div>
+    </section>
 
-      <!-- Description -->
-      <p class="text-lg text-gray-300 max-w-2xl mb-8 leading-relaxed">
-            <i class="fas fa-search text-blue-400 mr-2"></i>
-            <span class="font-semibold">Analyze Wallets:</span>  
-            Enter any crypto wallet address and let <span class="text-blue-400 font-medium">White Binder</span>  
-            reveal transaction histories, suspicious activities, and potential risks in just seconds.
-          </p>
-
-            <!-- CTA Button -->
-            <router-link
-              to="/home"
-              class="px-8 py-3 bg-gradient-to-r from-blue-600 to-green-600 rounded-xl 
-                    text-lg font-semibold transition flex items-center justify-center gap-2 
-                    mx-auto w-fit shadow-lg group hover:shadow-blue-600/40 hover:shadow-green-600/40 duration-300"
-            >
-              <i class="fas fa-rocket group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300"></i>
-              Get Started
-            </router-link>
-
-
-          </div>
-        </section>
 
 
     <!-- about Section -->

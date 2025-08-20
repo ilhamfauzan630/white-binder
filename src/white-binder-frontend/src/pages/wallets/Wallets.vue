@@ -25,7 +25,7 @@
           <!-- <th class="px-4 py-2 text-center">Medium Risk</th> -->
           <th class="px-4 py-2 text-center">High Risk</th>
           <th class="px-4 py-2 text-center">Detail</th>
-          <th class="px-4 py-2 text-center">Hapus</th>
+          <th class="px-4 py-2 text-center">Delete</th>
         </tr>
       </thead>
       <tbody>
