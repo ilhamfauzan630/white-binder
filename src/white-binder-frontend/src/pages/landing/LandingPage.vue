@@ -3,11 +3,12 @@
     ref="container"
     class="landing-container h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-mandatory overscroll-contain"
   >
+    <!-- scroll animation -->
     <div
       v-if="currentSection < sectionEls.length - 1"
       class="fixed right-4 top-1/2 transform -translate-y-1/2 z-50 flex flex-col items-center space-y-2 text-gray-400"
     >
-    <span class="text-xs animate-pulse">Scroll</span>
+      <span class="text-xs animate-pulse">Scroll</span>
       <i class="fas fa-angle-down text-xl animate-bounce"></i>
     </div>
 
@@ -118,9 +119,9 @@ export default {
   data() {
     return {
       currentSection: 0,
-      animRefs: [],       // wrappers untuk animasi
-      sectionEls: [],     // semua <section>
-      isAnimating: false, // kunci gesture
+      animRefs: [],      
+      sectionEls: [],   
+      isAnimating: false, 
       lockMs: 700
     }
   },
@@ -133,19 +134,19 @@ export default {
       this.currentSection = index
       this.isAnimating = true
       this.sectionEls[index].scrollIntoView({ behavior: 'smooth' })
-      // Lepaskan kunci setelah durasi scroll
+
       setTimeout(() => { this.isAnimating = false }, this.lockMs)
     },
     handleWheel(e) {
-      // cegah scroll native agar tidak dobel
       e.preventDefault()
+      
       if (this.isAnimating) return
       const dir = Math.sign(e.deltaY)
       if (dir > 0) this.scrollToSection(this.currentSection + 1)
       else if (dir < 0) this.scrollToSection(this.currentSection - 1)
     },
     handleKey(e) {
-      // dukung keyboard navigation
+      // keyboard navigation
       const nextKeys = ['ArrowDown', 'PageDown', 'Space']
       const prevKeys = ['ArrowUp', 'PageUp']
       if (nextKeys.includes(e.code) || nextKeys.includes(e.key)) {
@@ -207,7 +208,6 @@ export default {
 </script>
 
 <style scoped>
-/* Hilangkan scrollbar hanya di halaman ini */
 .landing-container {
   scrollbar-width: none;      /* Firefox */
   -ms-overflow-style: none;   /* IE/Edge */
